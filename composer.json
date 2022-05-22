@@ -1,0 +1,47 @@
+{
+    "name": "jukuan/alfa-acquiring",
+    "description": "Internet Acquiring helper for bePaid (Belarus), non-official.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Julian",
+            "email": "i@juljan.by"
+        }
+    ],
+    "keywords": [
+        "Belarus",
+        "Беларусь",
+        "Be-Paid",
+        "Be Paid",
+        "bePaid",
+        "acquiring",
+        "payment",
+        "credit card"
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "sort-packages": true,
+    "require": {
+        "php": ">=7.4",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "BePaidAcquiring\\": "lib/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Stripe\\": [
+                "tests/"
+            ]
+        }
+    },
+    "require-dev": {
+        "vimeo/psalm": "^4.12",
+        "phpunit/phpunit": "^9.5"
+    }
+}
