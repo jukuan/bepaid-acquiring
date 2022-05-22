@@ -15,22 +15,17 @@ $params = '
 {
     "notification_url": "http://merchant.com/subscription_notification",
     "plan": {
-    "currency": "USD",
+        "currency": "BYN",
         "plan": {
-        "amount": 20,
-            "interval": 20,
-            "interval_unit": "day"
+            "amount": 20,
+            "interval": 1,
+            "interval_unit": "month"
         },
         "shop_id": 10,
-        "title": "Basic plan",
-        "trial": {
-        "amount": 10,
-            "interval": 10,
-            "interval_unit": "hour"
-        }
+        "title": "Basic plan"
     },
     "settings": {
-    "language": "it"
+        "language": "be"
     }
 }
 ';
@@ -39,10 +34,11 @@ $result = $apiClient->doMethod('subscriptions', $params);
 if ($result) {
     $responseFields = $apiClient->getResponseFields();
     $responseAsObj = $apiClient->getResponse();
+    $url = $responseAsObj->getField('redirect_url');
 
     print '<pre>';
     var_dump($responseFields);
-    var_dump($responseAsObj);
+    var_dump($url);
     print '</pre>';
 } else {
     $errorMsg = $apiClient->getErrorMessage();

@@ -7,6 +7,7 @@ namespace BePaidAcquiring;
 use BePaidAcquiring\HttpClient\CurlClient;
 use BePaidAcquiring\HttpClient\HttpRequestInterface;
 use BePaidAcquiring\Response\BaseResponse;
+use BePaidAcquiring\Response\SubscriptionResponse;
 
 class BePaidClient
 {
@@ -175,6 +176,15 @@ class BePaidClient
         }
 
         return true;
+    }
+
+    public function createSubscription(array $data): SubscriptionResponse
+    {
+        if (!$this->doMethod('subscriptions', $data)) {
+            SubscriptionResponse::initialiseFailed($this->getErrorMessage());
+        }
+
+        return new SubscriptionResponse($this->getResponseFields());
     }
 
     public function getResponseFields(): array

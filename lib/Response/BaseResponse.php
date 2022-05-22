@@ -89,6 +89,11 @@ class BaseResponse implements ResponseInterface
         return $this->response;
     }
 
+    public function __sleep()
+    {
+        return ['response'];
+    }
+
     protected function checkErrorFields(array $fields): bool
     {
         if (isset($fields['errors']) && is_array($fields['errors'])) {
