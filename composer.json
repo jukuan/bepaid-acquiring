@@ -1,5 +1,5 @@
 {
-    "name": "jukuan/alfa-acquiring",
+    "name": "jukuan/bepaid-acquiring",
     "description": "Internet Acquiring helper for bePaid (Belarus), non-official.",
     "type": "library",
     "license": "MIT",
