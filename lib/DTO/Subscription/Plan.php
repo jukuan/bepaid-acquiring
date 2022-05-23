@@ -12,8 +12,12 @@ class Plan extends BaseDto
     private ?int $interval = null;
     private ?string $interval_unit = null;
 
-    public static function createFromArray(array $fields): Plan
+    public static function createFromArray($fields): Plan
     {
+        if (!is_array($fields)) {
+            return new static();
+        }
+
         $dto = new Plan();
         $dto->setAmount($fields['amount'] ?? null);
         $dto->setInterval($fields['interval'] ?? null);

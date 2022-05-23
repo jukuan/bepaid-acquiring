@@ -1,0 +1,42 @@
+{
+  "card": {
+    "token": "9990edb8e6f2af5d93a6259b690c50a7410bf9f97235f2e051345e01b580f699",
+    "holder": "John Doe",
+    "stamp": "b3839d334ba40e89168d60cd9f9d1390aee3fe67dd4d5c41adbf3998043eaef8",
+    "brand": "visa",
+    "last_4": "0000",
+    "first_1": "4",
+    "bin": "420000",
+    "issuer_country": null,
+    "issuer_name": null,
+    "product": null,
+    "token_provider": null,
+    "exp_month": 1,
+    "exp_year": 2025
+  },
+  "created_at": "2015-06-18T12:02:42.731Z",
+  "customer": {
+    "id": "cst_2a46e8b7ff87df2d"
+  },
+  "device_id": "any device_id",
+  "id": "sbs_1cc338f74bc9bfb7",
+  "last_transaction": null,
+  "plan": {
+    "currency": "USD",
+    "id": "pln_0b4ba2f1ab0c1988",
+    "plan": {
+      "amount": 20,
+      "interval": 7,
+      "interval_unit": "day"
+    },
+    "title": "Title 1",
+    "trial": {
+      "amount": 10,
+      "interval": 40,
+      "interval_unit": "hour"
+    }
+  },
+  "renew_at": null,
+  "state": "canceled",
+  "tracking_id": "any tracking_id"
+}

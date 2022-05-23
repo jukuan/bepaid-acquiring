@@ -9,7 +9,7 @@ use Exception;
 
 abstract class BaseDto
 {
-    abstract public static function createFromArray(array $fields): BaseDto;
+    abstract public static function createFromArray($fields): BaseDto;
 
     public function __set($name, $value)
     {

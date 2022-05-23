@@ -14,8 +14,12 @@ class PlanObj extends BaseDto
     private ?string $title = null;
     private ?Plan $trial = null;
 
-    public static function createFromArray(array $fields): PlanObj
+    public static function createFromArray($fields): PlanObj
     {
+        if (!is_array($fields)) {
+            return new static();
+        }
+
         $dto = new PlanObj();
         $dto->setCurrency($fields['currency'] ?? null);
         $dto->setId($fields['id'] ?? null);

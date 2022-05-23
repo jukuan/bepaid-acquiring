@@ -22,8 +22,12 @@ class Card extends BaseDto
     private ?int $exp_month = null;
     private ?int $exp_year = null;
 
-    public static function createFromArray(array $fields): Card
+    public static function createFromArray($fields): Card
     {
+        if (!is_array($fields)) {
+            return new static();
+        }
+
         $dto = new Card();
         $dto->setToken(isset($fields['token']) ? $fields['token'] : null);
         $dto->setHolder(isset($fields['holder']) ? $fields['holder'] : null);

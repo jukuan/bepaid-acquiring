@@ -12,8 +12,12 @@ class Transaction extends BaseDto
     private ?string $status = null;
     private ?string $uid = null;
 
-    public static function createFromArray(array $fields): Transaction
+    public static function createFromArray($fields): Transaction
     {
+        if (!is_array($fields)) {
+            return new static();
+        }
+
         $dto = new Transaction();
         $dto->setCreatedAt(isset($fields['created_at']) ? self::toDateTime($fields['created_at']) : null);
         $dto->setMessage($fields['message'] ?? null);

@@ -14,9 +14,11 @@
         "Беларусь",
         "Be-Paid",
         "Be Paid",
-        "bePaid",
+        "bepaid",
+        "begateway",
         "acquiring",
         "payment",
+        "payment processing",
         "credit card"
     ],
     "minimum-stability": "stable",
@@ -35,7 +37,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Stripe\\": [
+            "Tests\\": [
                 "tests/"
             ]
         }

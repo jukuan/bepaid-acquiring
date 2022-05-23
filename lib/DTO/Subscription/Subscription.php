@@ -19,8 +19,12 @@ class Subscription extends BaseDto
     private ?string $tracking_id = null;
     private ?Transaction $transaction = null;
 
-    public static function createFromArray(array $fields): Subscription
+    public static function createFromArray($fields): Subscription
     {
+        if (!is_array($fields)) {
+            return new static();
+        }
+
         $dto = new Subscription();
         $dto->setCard(isset($fields['card']) ? Card::createFromArray($fields['card']) : null);
         $dto->setCreatedAt(isset($fields['created_at']) ? self::toDateTime($fields['created_at']) : null);

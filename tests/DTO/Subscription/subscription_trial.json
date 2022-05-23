@@ -1,0 +1,46 @@
+{
+  "card": {
+    "token": "5559786942408b77017a3aac8390d46d77d181e34554df527a71919a856d0f28",
+    "holder": "John Doe",
+    "stamp": "b3839d334ba40e89168d60cd9f9d1390aee3fe67dd4d5c41adbf3998043eaef8",
+    "brand": "visa",
+    "last_4": "0000",
+    "first_1": "4",
+    "bin": "420000",
+    "issuer_country": null,
+    "issuer_name": null,
+    "product": null,
+    "token_provider": null,
+    "exp_month": 1,
+    "exp_year": 2025
+  },
+  "created_at": "2015-01-27T15:54:32.629Z",
+  "customer": {
+    "id": "cst_25cd5ed1b6f93cfb"
+  },
+  "id": "sbs_f4117438947a554e",
+  "plan": {
+    "currency": "USD",
+    "id": "pln_341fb00a159bbfdd",
+    "plan": {
+      "amount": 20,
+      "interval": 20,
+      "interval_unit": "day"
+    },
+    "title": "Basic plan",
+    "trial": {
+      "amount": 10,
+      "interval": 10,
+      "interval_unit": "hour"
+    }
+  },
+  "renew_at": "2015-01-28T01:54:32.684Z",
+  "state": "trial",
+  "tracking_id": "my_tracking_id",
+  "transaction": {
+    "created_at": "2015-01-12T09:04:59.000Z",
+    "message": "Successfully processed",
+    "status": "successful",
+    "uid": "4107-310b0da80b"
+  }
+}
