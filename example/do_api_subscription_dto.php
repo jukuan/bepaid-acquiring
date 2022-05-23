@@ -1,8 +1,14 @@
 <?php
 
 use BePaidAcquiring\BePaidClient;
+use BePaidAcquiring\Request\SubscriptionRequest;
+use BePaidAcquiring\Response\SubscriptionResponse;
 
 require __DIR__ . '/../vendor/autoload.php';
+
+/**
+ * Documentation https://docs.bepaid.by/ru/subscriptions/subscriptions#create-subscription
+ */
 
 /** @var BePaidClient $BePaidClient */
 $BePaidClient = require '_client_credentials.php';
@@ -11,13 +17,13 @@ $apiClient = $BePaidClient
 ;
 
 // execute
-$request = new \BePaidAcquiring\Request\SubscriptionRequest(
+$request = new SubscriptionRequest(
     'http://merchant.com/subscription_notification',
     'Basic plan',
     10,
     20,
 );
-/** @var \BePaidAcquiring\Response\SubscriptionResponse $responseAsObj */
+/** @var SubscriptionResponse $responseAsObj */
 $responseAsObj = $apiClient->createSubscription($request->toArray());
 
 if ($responseAsObj->isValid()) {
