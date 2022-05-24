@@ -29,19 +29,19 @@ class Card extends BaseDto
         }
 
         $dto = new Card();
-        $dto->setToken(isset($fields['token']) ? $fields['token'] : null);
-        $dto->setHolder(isset($fields['holder']) ? $fields['holder'] : null);
-        $dto->setStamp(isset($fields['stamp']) ? $fields['stamp'] : null);
-        $dto->setBrand(isset($fields['brand']) ? $fields['brand'] : null);
-        $dto->setLast4(isset($fields['last_4']) ? $fields['last_4'] : null);
-        $dto->setFirst1(isset($fields['first_1']) ? $fields['first_1'] : null);
-        $dto->setBin(isset($fields['bin']) ? $fields['bin'] : null);
-        $dto->setIssuerCountry(isset($fields['issuer_country']) ? $fields['issuer_country'] : null);
-        $dto->setIssuerName(isset($fields['issuer_name']) ? $fields['issuer_name'] : null);
-        $dto->setProduct(isset($fields['product']) ? $fields['product'] : null);
-        $dto->setTokenProvider(isset($fields['token_provider']) ? $fields['token_provider'] : null);
-        $dto->setExpMonth(isset($fields['exp_month']) ? $fields['exp_month'] : null);
-        $dto->setExpYear(isset($fields['exp_year']) ? $fields['exp_year'] : null);
+        $dto->setToken($fields['token'] ?? null);
+        $dto->setHolder($fields['holder'] ?? null);
+        $dto->setStamp($fields['stamp'] ?? null);
+        $dto->setBrand($fields['brand'] ?? null);
+        $dto->setLast4($fields['last_4'] ?? null);
+        $dto->setFirst1($fields['first_1'] ?? null);
+        $dto->setBin($fields['bin'] ?? null);
+        $dto->setIssuerCountry($fields['issuer_country'] ?? null);
+        $dto->setIssuerName($fields['issuer_name'] ?? null);
+        $dto->setProduct($fields['product'] ?? null);
+        $dto->setTokenProvider($fields['token_provider'] ?? null);
+        $dto->setExpMonth($fields['exp_month'] ?? null);
+        $dto->setExpYear($fields['exp_year'] ?? null);
 
         return $dto;
     }

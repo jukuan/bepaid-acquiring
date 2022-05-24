@@ -8,6 +8,7 @@ use BePaidAcquiring\HttpClient\CurlClient;
 use BePaidAcquiring\HttpClient\HttpRequestInterface;
 use BePaidAcquiring\Response\BaseResponse;
 use BePaidAcquiring\Response\SubscriptionResponse;
+use InvalidArgumentException;
 
 class BePaidClient
 {
@@ -18,23 +19,13 @@ class BePaidClient
         //'Module-Version: ' . self::LIB_VERSION,
     ];
 
-    private const ENDPOINT_API_BASE = 'https://api.begateway.com';
+    private const ENDPOINT_API_BASE = 'https://api.bepaid.by';
 
     private const ENDPOINT_PROD_GATEWAY = 'https://gateway.bepaid.by';
     private const ENDPOINT_PROD_CHECKOUT = 'https://checkout.bepaid.by';
 
     private const ENDPOINT_TEST_GATEWAY = 'https://demo-gateway.begateway.com';
     private const ENDPOINT_TEST_CHECKOUT = 'https://checkout.begateway.com';
-
-    public const BYN_CURRENCY = 933;
-    public const EUR_CURRENCY = 978;
-    public const USD_CURRENCY = 840;
-
-    public const CURRENCIES = [
-        'BYN' => self::BYN_CURRENCY,
-        'EUR' => self::EUR_CURRENCY,
-        'USD' => self::USD_CURRENCY,
-    ];
 
     /**
      * Language codes in "ISO 639-1" format.
@@ -52,7 +43,6 @@ class BePaidClient
 
     private ?bool $isTestMode = null;
     //private string $language = self::DEFAULT_LANGUAGE;
-    private int $currency = self::BYN_CURRENCY;
     private HttpRequestInterface $client;
     private string $errorMessage = '';
 
@@ -70,7 +60,7 @@ class BePaidClient
         $this->shopKey = $shopKey;
 
         if (!$this->shopId || !$this->shopKey) {
-            throw new \InvalidArgumentException('Shop ID and Shop Key are required');
+            throw new InvalidArgumentException('Shop ID and Shop Key are required');
         }
 
         if (null === $this->isTestMode) {
@@ -82,7 +72,7 @@ class BePaidClient
         $this->checkoutBase = $parameters['checkoutBase'] ?? ($this->isTestMode ? self::ENDPOINT_TEST_CHECKOUT : self::ENDPOINT_PROD_CHECKOUT);
 
         if ('' === $this->gatewayBase || '' === $this->checkoutBase) {
-            throw new \InvalidArgumentException('Gateway and checkout base URLs must be specified');
+            throw new InvalidArgumentException('Gateway and checkout base URLs must be specified');
         }
 
         $this->client = (new CurlClient())->setHttpHeaders(self::HTTP_HEADERS);
@@ -140,11 +130,6 @@ class BePaidClient
         return $url . '/' . $this->prepareMethod($method);
     }
 
-    /**
-     * @param string $method
-     * @param array|string $postData
-     * @return bool
-     */
     public function doMethod(string $method, $postData = '', string $mode = 'api'): bool
     {
         $this->reset();
