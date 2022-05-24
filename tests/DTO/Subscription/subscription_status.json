@@ -1,0 +1,56 @@
+{
+  "id": "sbs_43cb5f79f8b56c17",
+  "state": "successful",
+  "tracking_id": "my_tracking_id",
+  "device_id": null,
+  "created_at": "2021-07-01T13:05:45.699Z",
+  "renew_at": null,
+  "active_to": null,
+  "card": {
+    "holder": "John Doe",
+    "stamp": "pr334ba40e89168d60cd9f9d1390aee3fe67dd4d5c41adbf3998043eaef8",
+    "brand": "visa",
+    "last_4": "0000",
+    "first_1": "4",
+    "bin": "420000",
+    "issuer_country": null,
+    "issuer_name": null,
+    "product": null,
+    "token": "1e2f9f69-a9d3-4d6d-a6c3-f029c3db70e6",
+    "token_provider": null,
+    "exp_month": 1,
+    "exp_year": 2025
+  },
+  "customer": {
+    "id": "cst_cebacd2a35f2041e"
+  },
+  "paid_billing_cycles": 0,
+  "number_failed_payment_attempts": 0,
+  "additional_data": {},
+  "plan": {
+    "id": "pln_7fd782ffa0fbc926",
+    "title": "Basic plan",
+    "currency": "USD",
+    "language": null,
+    "infinite": true,
+    "billing_cycles": null,
+    "trial": {
+      "amount": 10,
+      "interval": 10,
+      "interval_unit": "hour"
+    },
+    "plan": {
+      "amount": 20,
+      "interval": 20,
+      "interval_unit": "day"
+    },
+    "number_payment_attempts": 1,
+    "test": null
+  },
+  "last_transaction": {
+    "uid": "11749-e427d3dc44",
+    "status": "successful",
+    "message": "Successfully processed",
+    "created_at": "2021-07-01T13:05:46.447Z"
+  }
+}

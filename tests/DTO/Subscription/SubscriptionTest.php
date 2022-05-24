@@ -60,6 +60,9 @@ class SubscriptionTest extends TestCase
         $out = file_get_contents(__DIR__.'/subscription_trial.json');
         yield 'Trial subscription' => [$out, '5559786942408b77017a3aac8390d46d77d181e34554df527a71919a856d0f28'];
 
+        $out = file_get_contents(__DIR__.'/subscription_status.json');
+        yield 'Subscription status' => [$out, '1e2f9f69-a9d3-4d6d-a6c3-f029c3db70e6'];
+
         yield 'Nullable data' => [null, null];
         yield 'Empty string' => ['', null];
         yield 'Not array' => ['42', null];

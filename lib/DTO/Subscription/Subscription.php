@@ -9,16 +9,21 @@ use DateTimeImmutable;
 
 class Subscription extends BaseDto
 {
-    private ?Card $card = null;
-    private ?DateTimeImmutable $created_at = null;
-    private ?Customer $customer = null;
     private ?string $id = null;
-    private ?PlanObj $plan = null;
-    private ?DateTimeImmutable $renew_at = null;
     private ?string $state = null;
     private ?string $tracking_id = null;
+    private ?string $device_id = null;
+
+    private ?Card $card = null;
+    private ?Customer $customer = null;
+    private ?PlanObj $plan = null;
+
     private ?Transaction $transaction = null;
     private ?Transaction $lastTransaction = null;
+
+    private ?DateTimeImmutable $created_at = null;
+    private ?DateTimeImmutable $renew_at = null;
+    private ?DateTimeImmutable $active_to = null;
 
     public static function createFromArray($fields): Subscription
     {
@@ -27,32 +32,30 @@ class Subscription extends BaseDto
         }
 
         $dto = new Subscription();
-        $dto->setCard(isset($fields['card']) ? Card::createFromArray($fields['card']) : null);
-        $dto->setCreatedAt(isset($fields['created_at']) ? self::toDateTime($fields['created_at']) : null);
-        $dto->setCustomer(isset($fields['customer']) ? Customer::createFromArray($fields['customer']) : null);
         $dto->setId($fields['id'] ?? null);
-        $dto->setPlan(isset($fields['plan']) ? PlanObj::createFromArray($fields['plan']) : null);
-        $dto->setRenewAt(isset($fields['renew_at']) ? self::toDateTime($fields['renew_at']) : null);
         $dto->setState($fields['state'] ?? null);
         $dto->setTrackingId($fields['tracking_id'] ?? null);
+        $dto->setDeviceId($fields['device_id'] ?? null);
+
+        $dto->setCard(isset($fields['card']) ? Card::createFromArray($fields['card']) : null);
+        $dto->setCustomer(isset($fields['customer']) ? Customer::createFromArray($fields['customer']) : null);
+        $dto->setPlan(isset($fields['plan']) ? PlanObj::createFromArray($fields['plan']) : null);
+
         $dto->setTransaction(isset($fields['transaction']) ? Transaction::createFromArray($fields['transaction']) : null);
         $dto->setLastTransaction(isset($fields['last_transaction']) ? Transaction::createFromArray($fields['last_transaction']) : null);
+
+        $dto->setCreatedAt(isset($fields['created_at']) ? self::toDateTime($fields['created_at']) : null);
+        $dto->setRenewAt(isset($fields['renew_at']) ? self::toDateTime($fields['renew_at']) : null);
+        $dto->setActiveTo(isset($fields['active_to']) ? self::toDateTime($fields['active_to']) : null);
 
         return $dto;
     }
 
-    /**
-     * @return Card|null
-     */
     public function getCard(): ?Card
     {
         return $this->card;
     }
 
-    /**
-     * @param Card|null $card
-     * @return Subscription
-     */
     public function setCard(?Card $card): Subscription
     {
         $this->card = $card;
@@ -60,18 +63,11 @@ class Subscription extends BaseDto
         return $this;
     }
 
-    /**
-     * @return DateTimeImmutable|null
-     */
     public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->created_at;
     }
 
-    /**
-     * @param DateTimeImmutable|null $created_at
-     * @return Subscription
-     */
     public function setCreatedAt(?DateTimeImmutable $created_at): Subscription
     {
         $this->created_at = $created_at;
@@ -79,18 +75,11 @@ class Subscription extends BaseDto
         return $this;
     }
 
-    /**
-     * @return Customer|null
-     */
     public function getCustomer(): ?Customer
     {
         return $this->customer;
     }
 
-    /**
-     * @param Customer|null $customer
-     * @return Subscription
-     */
     public function setCustomer(?Customer $customer): Subscription
     {
         $this->customer = $customer;
@@ -98,18 +87,11 @@ class Subscription extends BaseDto
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getId(): ?string
     {
         return $this->id;
     }
 
-    /**
-     * @param string|null $id
-     * @return Subscription
-     */
     public function setId(?string $id): Subscription
     {
         $this->id = $id;
@@ -117,18 +99,11 @@ class Subscription extends BaseDto
         return $this;
     }
 
-    /**
-     * @return PlanObj|null
-     */
     public function getPlan(): ?PlanObj
     {
         return $this->plan;
     }
 
-    /**
-     * @param PlanObj|null $plan
-     * @return Subscription
-     */
     public function setPlan(?PlanObj $plan): Subscription
     {
         $this->plan = $plan;
@@ -136,18 +111,11 @@ class Subscription extends BaseDto
         return $this;
     }
 
-    /**
-     * @return DateTimeImmutable|null
-     */
     public function getRenewAt(): ?DateTimeImmutable
     {
         return $this->renew_at;
     }
 
-    /**
-     * @param DateTimeImmutable|null $renew_at
-     * @return Subscription
-     */
     public function setRenewAt(?DateTimeImmutable $renew_at): Subscription
     {
         $this->renew_at = $renew_at;
@@ -155,18 +123,11 @@ class Subscription extends BaseDto
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getState(): ?string
     {
         return $this->state;
     }
 
-    /**
-     * @param string|null $state
-     * @return Subscription
-     */
     public function setState(?string $state): Subscription
     {
         $this->state = $state;
@@ -174,18 +135,11 @@ class Subscription extends BaseDto
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getTrackingId(): ?string
     {
         return $this->tracking_id;
     }
 
-    /**
-     * @param string|null $tracking_id
-     * @return Subscription
-     */
     public function setTrackingId(?string $tracking_id): Subscription
     {
         $this->tracking_id = $tracking_id;
@@ -193,18 +147,11 @@ class Subscription extends BaseDto
         return $this;
     }
 
-    /**
-     * @return Transaction|null
-     */
     public function getTransaction(): ?Transaction
     {
         return $this->transaction;
     }
 
-    /**
-     * @param Transaction|null $transaction
-     * @return Subscription
-     */
     public function setTransaction(?Transaction $transaction): Subscription
     {
         $this->transaction = $transaction;
@@ -212,18 +159,11 @@ class Subscription extends BaseDto
         return $this;
     }
 
-    /**
-     * @return Transaction|null
-     */
     public function getLastTransaction(): ?Transaction
     {
         return $this->lastTransaction;
     }
 
-    /**
-     * @param Transaction|null $lastTransaction
-     * @return Subscription
-     */
     public function setLastTransaction(?Transaction $lastTransaction): Subscription
     {
         $this->lastTransaction = $lastTransaction;
@@ -303,11 +243,33 @@ class Subscription extends BaseDto
         return $this->lastTransaction->getStatus();
     }
 
+    public function getDeviceId(): ?string
+    {
+        return $this->device_id;
+    }
+
+    public function setDeviceId(?string $device_id): Subscription
+    {
+        $this->device_id = $device_id;
+
+        return $this;
+    }
+
+    public function getActiveTo(): ?DateTimeImmutable
+    {
+        return $this->active_to;
+    }
+
+    public function setActiveTo(?DateTimeImmutable $active_to): Subscription
+    {
+        $this->active_to = $active_to;
+
+        return $this;
+    }
+
     public function isValid(): bool
     {
         return null !== $this->getId() &&
-            null !== $this->card &&
-            $this->card->isValid() &&
             null !== $this->plan &&
             $this->plan->isValid();
     }

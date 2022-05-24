@@ -9,12 +9,18 @@ use Exception;
 
 abstract class BaseDto
 {
+    protected const DATE_FIELDS = [
+        'created_at',
+        'renew_at',
+        'active_to',
+    ];
+
     abstract public static function createFromArray($fields): BaseDto;
 
     public function __set($name, $value)
     {
         if (property_exists($this, $name)) {
-            if (str_contains($name, '_at')) {
+            if ($this->isDateField($name)) {
                 try {
                     $value = new DateTimeImmutable($value);
                 }catch (Exception $e) {
@@ -44,5 +50,11 @@ abstract class BaseDto
         } catch (Exception $e) {
             return null;
         }
+    }
+
+    protected function isDateField(string $name): bool
+    {
+        return in_array($name, self::DATE_FIELDS, true)
+            || str_contains($name, '_at');
     }
 }

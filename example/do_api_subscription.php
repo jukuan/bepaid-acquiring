@@ -4,6 +4,10 @@ use BePaidAcquiring\BePaidClient;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+/**
+ * Documentation https://docs.bepaid.by/ru/subscriptions/subscriptions#create-subscription
+ */
+
 /** @var BePaidClient $BePaidClient */
 $BePaidClient = require '_client_credentials.php';
 $apiClient = $BePaidClient

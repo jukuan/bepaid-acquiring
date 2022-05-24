@@ -19,7 +19,8 @@ class BePaidClient
         //'Module-Version: ' . self::LIB_VERSION,
     ];
 
-    private const ENDPOINT_API_BASE = 'https://api.bepaid.by';
+    private const ENDPOINT_PROD_API_BASE = 'https://api.bepaid.by';
+    private const ENDPOINT_TEST_API_BASE = 'https://api.begateway.com';
 
     private const ENDPOINT_PROD_GATEWAY = 'https://gateway.bepaid.by';
     private const ENDPOINT_PROD_CHECKOUT = 'https://checkout.bepaid.by';
@@ -111,7 +112,7 @@ class BePaidClient
 
     private function prepareApiUrl(string $method): string
     {
-        $url = self::ENDPOINT_API_BASE;
+        $url = $this->isTestMode ? self::ENDPOINT_TEST_API_BASE : self::ENDPOINT_PROD_API_BASE;
 
         return $url . '/' . $this->prepareMethod($method);
     }
