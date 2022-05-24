@@ -82,4 +82,11 @@ class Plan extends BaseDto
 
         return $this;
     }
+
+    public function isValid(): bool
+    {
+        return $this->amount > 0 &&
+            $this->interval > 0 &&
+            null !== $this->interval_unit;
+    }
 }

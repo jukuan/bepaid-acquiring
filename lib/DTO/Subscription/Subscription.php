@@ -18,6 +18,7 @@ class Subscription extends BaseDto
     private ?string $state = null;
     private ?string $tracking_id = null;
     private ?Transaction $transaction = null;
+    private ?Transaction $lastTransaction = null;
 
     public static function createFromArray($fields): Subscription
     {
@@ -35,6 +36,7 @@ class Subscription extends BaseDto
         $dto->setState($fields['state'] ?? null);
         $dto->setTrackingId($fields['tracking_id'] ?? null);
         $dto->setTransaction(isset($fields['transaction']) ? Transaction::createFromArray($fields['transaction']) : null);
+        $dto->setLastTransaction(isset($fields['last_transaction']) ? Transaction::createFromArray($fields['last_transaction']) : null);
 
         return $dto;
     }
@@ -208,5 +210,105 @@ class Subscription extends BaseDto
         $this->transaction = $transaction;
 
         return $this;
+    }
+
+    /**
+     * @return Transaction|null
+     */
+    public function getLastTransaction(): ?Transaction
+    {
+        return $this->lastTransaction;
+    }
+
+    /**
+     * @param Transaction|null $lastTransaction
+     * @return Subscription
+     */
+    public function setLastTransaction(?Transaction $lastTransaction): Subscription
+    {
+        $this->lastTransaction = $lastTransaction;
+
+        return $this;
+    }
+
+    public function getCardToken(): ?string
+    {
+        if (null === $this->card) {
+            return null;
+        }
+
+        return $this->card->getToken();
+    }
+
+    public function getPlanId(): ?string
+    {
+        if (null === $this->plan) {
+            return null;
+        }
+
+        return $this->plan->getId();
+    }
+
+    public function getPlanAmount(): ?int
+    {
+        if (null === $this->plan || null === $this->plan->getPlan()) {
+            return null;
+        }
+
+        return $this->plan->getPlan()->getAmount();
+    }
+
+    public function getExpiration() : ?string
+    {
+        if (null === $this->card) {
+            return null;
+        }
+
+        return sprintf('%s-%s', $this->card->getExpYear(), $this->card->getExpMonth());
+    }
+
+    public function getCardHolder() : ?string
+    {
+        if (null === $this->card) {
+            return null;
+        }
+
+        return $this->card->getHolder();
+    }
+
+    public function getCardLastDigits() : ?string
+    {
+        if (null === $this->card) {
+            return null;
+        }
+
+        return $this->card->getLast4();
+    }
+
+    public function getTransactionStatus() : ?string
+    {
+        if (null === $this->transaction) {
+            return null;
+        }
+
+        return $this->transaction->getStatus();
+    }
+
+    public function getLastTransactionStatus() : ?string
+    {
+        if (null === $this->lastTransaction) {
+            return null;
+        }
+
+        return $this->lastTransaction->getStatus();
+    }
+
+    public function isValid(): bool
+    {
+        return null !== $this->getId() &&
+            null !== $this->card &&
+            $this->card->isValid() &&
+            null !== $this->plan &&
+            $this->plan->isValid();
     }
 }

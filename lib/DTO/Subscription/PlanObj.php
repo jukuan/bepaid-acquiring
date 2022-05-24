@@ -124,4 +124,9 @@ class PlanObj extends BaseDto
 
         return $this;
     }
+
+    public function isValid(): bool
+    {
+        return null !== $this->id && $this->plan->isValid();
+    }
 }

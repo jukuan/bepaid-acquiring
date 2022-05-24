@@ -292,4 +292,12 @@ class Card extends BaseDto
 
         return $this;
     }
+
+    public function isValid(): bool
+    {
+        return $this->token !== null &&
+            $this->last_4 !== null &&
+            $this->exp_month !== null &&
+            $this->exp_year !== null;
+    }
 }
