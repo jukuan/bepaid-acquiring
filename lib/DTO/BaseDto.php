@@ -19,18 +19,17 @@ abstract class BaseDto
 
     public function __set($name, $value)
     {
-        if (property_exists($this, $name)) {
-            if ($this->isDateField($name)) {
-                try {
-                    $value = new DateTimeImmutable($value);
-                }catch (Exception $e) {
-                }
-            }
+        if (!property_exists($this, $name)) {
+            return;
+        }
 
-            try {
-                $this->{$name} = $value;
-            } catch (Exception $e) {
-            }
+        if ($this->isDateField($name)) {
+            $value = $this->toDateTime($value) ?? $value;
+        }
+
+        try {
+            $this->{$name} = $value;
+        } catch (Exception $e) {
         }
     }
 

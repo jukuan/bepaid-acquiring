@@ -13,6 +13,8 @@ class Subscription extends BaseDto
     private ?string $state = null;
     private ?string $tracking_id = null;
     private ?string $device_id = null;
+    private ?int $paid_billing_cycles = null;
+    private ?int $number_failed_payment_attempts = null;
 
     private ?Card $card = null;
     private ?Customer $customer = null;
@@ -36,6 +38,8 @@ class Subscription extends BaseDto
         $dto->setState($fields['state'] ?? null);
         $dto->setTrackingId($fields['tracking_id'] ?? null);
         $dto->setDeviceId($fields['device_id'] ?? null);
+        $dto->setPaidBillingCycles($fields['paid_billing_cycles'] ?? null);
+        $dto->setNumberFailedPaymentAttempts($fields['number_failed_payment_attempts'] ?? null);
 
         $dto->setCard(isset($fields['card']) ? Card::createFromArray($fields['card']) : null);
         $dto->setCustomer(isset($fields['customer']) ? Customer::createFromArray($fields['customer']) : null);
@@ -251,6 +255,30 @@ class Subscription extends BaseDto
     public function setDeviceId(?string $device_id): Subscription
     {
         $this->device_id = $device_id;
+
+        return $this;
+    }
+
+    public function getPaidBillingCycles(): ?int
+    {
+        return $this->paid_billing_cycles;
+    }
+
+    public function setPaidBillingCycles(?int $paid_billing_cycles): Subscription
+    {
+        $this->paid_billing_cycles = $paid_billing_cycles;
+
+        return $this;
+    }
+
+    public function getNumberFailedPaymentAttempts(): ?int
+    {
+        return $this->number_failed_payment_attempts;
+    }
+
+    public function setNumberFailedPaymentAttempts(?int $number_failed_payment_attempts): Subscription
+    {
+        $this->number_failed_payment_attempts = $number_failed_payment_attempts;
 
         return $this;
     }
