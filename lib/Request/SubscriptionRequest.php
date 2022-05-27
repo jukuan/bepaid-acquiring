@@ -6,7 +6,6 @@ namespace BePaidAcquiring\Request;
 
 class SubscriptionRequest
 {
-    private string $notificationUrl;
     private string $title;
     private string $currency;
     private string $languageCode;
@@ -15,8 +14,11 @@ class SubscriptionRequest
     private int $planInterval = 1;
     private string $intervalUnit = 'month';
 
+    private string $notificationUrl = '';
+    private string $return_url = '';
+    private array $customer = [];
+
     public function __construct(
-        string $notificationUrl,
         string $title,
         int $shopId,
         int $amount,
@@ -25,7 +27,6 @@ class SubscriptionRequest
         int $planInterval = 1,
         string $intervalUnit = 'month'
     ) {
-        $this->notificationUrl = $notificationUrl;
         $this->title = $title;
         $this->shopId = $shopId;
         $this->amount = $amount;
@@ -37,8 +38,7 @@ class SubscriptionRequest
 
     public function toArray(): array
     {
-        return [
-            'notification_url' => $this->notificationUrl,
+        $request = [
             'plan' => [
                 'currency' => $this->currency,
                 'plan' => [
@@ -53,5 +53,40 @@ class SubscriptionRequest
                 'language' => $this->languageCode,
             ],
         ];
+
+        if ('' !== $this->notificationUrl) {
+            $request['notification_url'] = $this->notificationUrl;
+        }
+
+        if ('' !== $this->return_url) {
+            $request['return_url'] = $this->return_url;
+        }
+
+        if (count($this->customer) > 0) {
+            $request['customer'] = $this->customer;
+        }
+
+        return $request;
+    }
+
+    public function setNotificationUrl(string $notificationUrl): SubscriptionRequest
+    {
+        $this->notificationUrl = $notificationUrl;
+
+        return $this;
+    }
+
+    public function setReturnUrl(string $return_url): SubscriptionRequest
+    {
+        $this->return_url = $return_url;
+
+        return $this;
+    }
+
+    public function setCustomer(array $customer): SubscriptionRequest
+    {
+        $this->customer = $customer;
+
+        return $this;
     }
 }

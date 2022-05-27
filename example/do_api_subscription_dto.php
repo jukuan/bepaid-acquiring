@@ -18,7 +18,6 @@ $apiClient = $BePaidClient
 
 // execute
 $request = new SubscriptionRequest(
-    'http://merchant.com/subscription_notification',
     'Basic plan',
     10,
     20,

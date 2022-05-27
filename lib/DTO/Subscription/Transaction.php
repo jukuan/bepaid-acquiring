@@ -73,6 +73,11 @@ class Transaction extends BaseDto
         return $this->status;
     }
 
+    public function isSuccessStatus(): bool
+    {
+        return 'successful' === $this->status;
+    }
+
     /**
      * @param string|null $status
      * @return Transaction

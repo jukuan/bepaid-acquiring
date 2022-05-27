@@ -132,6 +132,11 @@ class Subscription extends BaseDto
         return $this->state;
     }
 
+    public function isActiveState(): bool
+    {
+        return 'active' === $this->state;
+    }
+
     public function setState(?string $state): Subscription
     {
         $this->state = $state;
