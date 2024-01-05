@@ -22,7 +22,7 @@ class Card extends BaseDto
     private ?int $exp_month = null;
     private ?int $exp_year = null;
 
-    public static function createFromArray($fields): Card
+    public static function createFromArray(?array $fields): Card
     {
         if (!is_array($fields)) {
             return new static();

@@ -6,6 +6,9 @@ namespace BePaidAcquiring\HttpClient;
 
 use Exception;
 
+/**
+ * TODO: rewrite that and use Psr\Http\Client\ClientInterface;
+ */
 class CurlClient implements HttpRequestInterface
 {
     private int $timeout = 0;
@@ -27,30 +30,56 @@ class CurlClient implements HttpRequestInterface
      */
     private array $httpHeaders = [];
 
+    private array $curlOptions = [
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => true,
+    ];
+
     private int $httpCode = 0;
 
-    private function buildCurlOptions(string $url, string $postData = '', array $options = []): array
+    public function addCurlOpt(int $key, string $value): CurlClient
     {
-        //$options[CURLOPT_SSL_VERIFYHOST] = true;
-        $options[CURLOPT_SSL_VERIFYPEER] = true;
-        $options[CURLOPT_URL] = $url;
-        $options[CURLOPT_RETURNTRANSFER] = true;
-        $options[CURLOPT_ENCODING] = true;
+        $this->curlOptions[$key] = $value;
 
-        if ($this->timeout > 0) {
-            $options[CURLOPT_CONNECTTIMEOUT] = $this->timeout;
+        return $this;
+    }
+
+    public function setRequestType(string $requestType): CurlClient
+    {
+        return $this->addCurlOpt(CURLOPT_CUSTOMREQUEST, $requestType);
+    }
+
+    /**
+     * @param string|array $postData
+     *
+     * @return $this
+     */
+    public function setPostBody($postData): CurlClient
+    {
+        if (is_array($postData)) {
+            $postData = count($postData) > 0 ? json_encode($postData) : '';
         }
 
-        if (strlen($postData) > 0) {
-            $options[CURLOPT_POST] = true;
-            $options[CURLOPT_POSTFIELDS] = $postData;
+        $this->curlOptions[CURLOPT_POST] = true;
+        $this->curlOptions[CURLOPT_POSTFIELDS] = $postData;
+
+        $this->httpHeaders = array_merge($this->httpHeaders, ['Content-type: application/json']);
+
+        return $this;
+    }
+
+    private function buildCurlOptions(string $url, array $options = []): void
+    {
+        $this->curlOptions[CURLOPT_URL] = $url;
+
+        if ($this->timeout > 0) {
+            $this->curlOptions[CURLOPT_CONNECTTIMEOUT] = $this->timeout;
         }
 
         if (count($this->httpHeaders) > 0) {
-            $options[CURLOPT_HTTPHEADER] = $this->httpHeaders;
+            $this->curlOptions[CURLOPT_HTTPHEADER] = $this->httpHeaders;
         }
-
-        return $options;
     }
 
     private function decodeResponse(?string $response): void
@@ -66,12 +95,12 @@ class CurlClient implements HttpRequestInterface
         }
     }
 
-    public function execute(string $url, string $postData = '', array $optFields = []): CurlClient
+    public function execute(string $url, array $optFields = []): CurlClient
     {
         $this->initialise();
-        $options = $this->buildCurlOptions($url, $postData, $optFields);
+        $this->buildCurlOptions($url, $optFields);
 
-        if (!curl_setopt_array($this->ch, $options)) {
+        if (!curl_setopt_array($this->ch, $this->curlOptions)) {
             $this->setError('Cannot set curl options', $this->ch);
         }
 
@@ -113,7 +142,13 @@ class CurlClient implements HttpRequestInterface
             return null;
         }
 
-        return curl_exec($this->ch) ?: null;
+        $res = curl_exec($this->ch);
+
+        if (!$res) {
+            return null;
+        }
+
+        return (string) $res;
     }
 
     private function getCurlHttpCode(): int
@@ -169,11 +204,6 @@ class CurlClient implements HttpRequestInterface
         return null !== $this->exception;
     }
 
-    /**
-     * @param string[] $headers
-     *
-     * @return CurlClient
-     */
     public function setHttpHeaders(array $headers): CurlClient
     {
         $this->httpHeaders = $headers;
@@ -181,6 +211,12 @@ class CurlClient implements HttpRequestInterface
         return $this;
     }
 
+    /**
+     * @param int $name
+     * @param int|bool|string $value
+     *
+     * @return $this
+     */
     public function setOption(int $name, $value): CurlClient
     {
         curl_setopt($this->ch, $name, $value);

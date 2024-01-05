@@ -10,9 +10,19 @@ interface HttpRequestInterface
 
     public function setHttpHeaders(array $headers): HttpRequestInterface;
 
+    public function addCurlOpt(int $key, string $value): HttpRequestInterface;
+
+    public function setRequestType(string $requestType): HttpRequestInterface;
+
+    public function setPostBody($postData): HttpRequestInterface;
+
+    public function getHttpResponseCode(): int;
+
+    public function setTimeout(int $timeout): HttpRequestInterface;
+
     public function getHttpResponse(): ?string;
 
-    public function execute(string $url, string $postData = '', array $optFields = []): HttpRequestInterface;
+    public function execute(string $url, array $optFields = []): HttpRequestInterface;
 
     public function getDecodedResponse();
 

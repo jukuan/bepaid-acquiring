@@ -41,7 +41,7 @@ class BaseResponse implements ResponseInterface
         return $this;
     }
 
-    protected function setErrorFields(string $errorMessage, $code = 0): BaseResponse
+    protected function setErrorFields(string $errorMessage, int $code = 0): BaseResponse
     {
         $this->setErrorMessageCode($errorMessage, $code);
 
@@ -75,6 +75,9 @@ class BaseResponse implements ResponseInterface
         return false;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getField(string $fieldName)
     {
         if (isset($this->response[$fieldName])) {

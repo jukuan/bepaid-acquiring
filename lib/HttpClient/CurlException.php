@@ -13,7 +13,7 @@ class CurlException extends Exception
     {
         return new self(
             $throwable->getMessage(),
-            $throwable->getCode(),
+            (int)$throwable->getCode(),
             $throwable
         );
     }

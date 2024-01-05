@@ -12,7 +12,7 @@ class Plan extends BaseDto
     private ?int $interval = null;
     private ?string $interval_unit = null;
 
-    public static function createFromArray($fields): Plan
+    public static function createFromArray(?array $fields): Plan
     {
         if (!is_array($fields)) {
             return new static();

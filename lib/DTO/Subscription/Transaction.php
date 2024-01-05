@@ -12,7 +12,7 @@ class Transaction extends BaseDto
     private ?string $status = null;
     private ?string $uid = null;
 
-    public static function createFromArray($fields): Transaction
+    public static function createFromArray(?array $fields): Transaction
     {
         if (!is_array($fields)) {
             return new static();

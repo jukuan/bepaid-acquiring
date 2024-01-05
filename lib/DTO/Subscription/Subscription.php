@@ -27,7 +27,7 @@ class Subscription extends BaseDto
     private ?DateTimeImmutable $renew_at = null;
     private ?DateTimeImmutable $active_to = null;
 
-    public static function createFromArray($fields): Subscription
+    public static function createFromArray(?array $fields): Subscription
     {
         if (!is_array($fields)) {
             return new static();
@@ -200,11 +200,9 @@ class Subscription extends BaseDto
 
     public function getPlanAmount(): ?int
     {
-        if (null === $this->plan || null === $this->plan->getPlan()) {
-            return null;
-        }
+        $plan = $this->plan ? $this->plan->getPlan() : null;
 
-        return $this->plan->getPlan()->getAmount();
+        return $plan ? $plan->getAmount() : null;
     }
 
     public function getExpiration() : ?string
@@ -213,7 +211,7 @@ class Subscription extends BaseDto
             return null;
         }
 
-        return sprintf('%s-%s', $this->card->getExpYear(), $this->card->getExpMonth());
+        return sprintf('%s-%s', $this->card->getExpYear() ?? '', $this->card->getExpMonth() ?? '');
     }
 
     public function getCardHolder() : ?string

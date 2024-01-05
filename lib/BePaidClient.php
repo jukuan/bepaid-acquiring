@@ -12,11 +12,9 @@ use InvalidArgumentException;
 
 class BePaidClient
 {
-    private const LIB_VERSION = '0.0.1';
     private const HTTP_HEADERS = [
-        'Content-Type: application/json',
+        'Accept: application/json',
         'CMS: BePaidAcquiring',
-        //'Module-Version: ' . self::LIB_VERSION,
     ];
 
     private const ENDPOINT_PROD_API_BASE = 'https://api.bepaid.by';
@@ -43,7 +41,7 @@ class BePaidClient
     private const DEFAULT_LANGUAGE = self::LANGUAGE_BE;
 
     private ?bool $isTestMode = null;
-    //private string $language = self::DEFAULT_LANGUAGE;
+    private string $language = self::DEFAULT_LANGUAGE;
     private HttpRequestInterface $client;
     private string $errorMessage = '';
 
@@ -51,6 +49,7 @@ class BePaidClient
     private string $shopKey;
     private string $gatewayBase;
     private string $checkoutBase;
+    private string $lastQuery = '';
 
     public function __construct(
         int $shopId,
@@ -82,7 +81,7 @@ class BePaidClient
     public function setLanguage(string $lang): BePaidClient
     {
         if (in_array($lang, self::LANGUAGES, true)) {
-            //$this->language = $lang;
+            $this->language = $lang;
         }
 
         return $this;
@@ -98,6 +97,7 @@ class BePaidClient
     private function reset(): void
     {
         $this->errorMessage = '';
+        $this->lastQuery = '';
     }
 
     public function getErrorMessage(): string
@@ -131,14 +131,8 @@ class BePaidClient
         return $url . '/' . $this->prepareMethod($method);
     }
 
-    public function doMethod(string $method, $postData = '', string $mode = 'api'): bool
+    private function prepareRequestUrl(string $method, string $mode = 'api'): string
     {
-        $this->reset();
-
-        if (is_array($postData)) {
-            $postData = count($postData) > 0 ? json_encode($postData) : '';
-        }
-
         if ('api' === $mode) {
             $url = $this->prepareApiUrl($method);
         } elseif ('gateway' === $mode) {
@@ -146,27 +140,110 @@ class BePaidClient
         } elseif ('checkout' === $mode) {
             $url = $this->prepareCheckoutUrl($method);
         } else {
-            $this->errorMessage = 'Unknown method\'s mode';
-
-            return false;
+            throw new \Exception('Unknown method\'s mode');
         }
 
-        $this->client->execute($url, $postData, [
-            CURLOPT_USERPWD => $this->getAuthorisationPwd(),
-        ]);
-
-        if ($this->client->hasError()) {
-            $this->errorMessage = $this->client->getErrorDetails();
-
-            return false;
-        }
-
-        return true;
+        return $url;
     }
 
+    /**
+     * @param string $method
+     * @param $postData
+     * @param string $mode
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     * @deprecated
+     *
+     */
+    public function doMethod(string $method, $postData = '', string $mode = 'api'): bool
+    {
+        $url = $this->prepareBeforeRequest($method, $mode);
+
+        if ($postData) {
+            $this->client->setPostBody($postData);
+            $this->lastQuery = 'POST '.$url;
+        } else {
+            $this->client->setRequestType('GET');
+            $this->lastQuery = 'GET '.$url;
+        }
+
+        $this->client->execute($url);
+
+        return $this->handleAfterRequest();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function get(string $method, string $mode = 'api'): bool
+    {
+        $url = $this->prepareBeforeRequest($method, $mode);
+        $this->lastQuery = 'GET '.$url;
+
+        $this->client
+            ->setRequestType('GET')
+            ->execute($url);
+
+        return $this->handleAfterRequest();
+    }
+
+    /**
+     * @param string $method
+     * @param string|array $postBody
+     * @param string $mode
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function post(string $method, $postBody = '', string $mode = 'api'): bool
+    {
+        $url = $this->prepareBeforeRequest($method, $mode);
+        $this->lastQuery = 'POST '.$url;
+
+        $this->client->setPostBody($postBody)->execute($url);
+
+        return $this->handleAfterRequest();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function put(string $method, string $body = '', string $mode = 'api'): bool
+    {
+        $url = $this->prepareBeforeRequest($method, $mode);
+        $this->lastQuery = 'PUT '.$url;
+
+        $this->client
+            ->setRequestType('PUT')
+            ->setPostBody($body)
+            ->execute($url);
+
+        return $this->handleAfterRequest();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function delete(string $method, string $mode = 'api'): bool
+    {
+        $url = $this->prepareBeforeRequest($method, $mode);
+        $this->lastQuery = 'DELETE '.$url;
+
+        $this->client
+            ->setRequestType('DELETE')
+            ->execute($url);
+
+        return $this->handleAfterRequest();
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function createSubscription(array $data): SubscriptionResponse
     {
-        if (!$this->doMethod('subscriptions', $data)) {
+        if (!$this->post('subscriptions', $data)) {
             SubscriptionResponse::initialiseFailed($this->getErrorMessage());
         }
 
@@ -190,14 +267,37 @@ class BePaidClient
         return $this;
     }
 
-    /*public function getLastQuery(): string
+    public function getLastQuery(): string
     {
-        return $this->client->getLastQuery();
-    }*/
+        return $this->lastQuery;
+    }
 
     public function getHttpResponseCode(): int
     {
         return $this->client->getHttpResponseCode();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    protected function prepareBeforeRequest(string $apiMethod, string $apiMode): string
+    {
+        $this->reset();
+
+        $this->client->addCurlOpt(CURLOPT_USERPWD, $this->getAuthorisationPwd());
+
+        return $this->prepareRequestUrl($apiMethod, $apiMode);
+    }
+
+    protected function handleAfterRequest(): bool
+    {
+        if ($this->client->hasError()) {
+            $this->errorMessage = $this->client->getErrorDetails();
+
+            return false;
+        }
+
+        return true;
     }
 
     private function getAuthorisationPwd(): string

@@ -10,7 +10,7 @@ class Customer extends BaseDto
 {
     private ?string $id = null;
 
-    public static function createFromArray($fields): Customer
+    public static function createFromArray(?array $fields): Customer
     {
         $dto = new Customer();
         $dto->setId($fields['id'] ?? null);

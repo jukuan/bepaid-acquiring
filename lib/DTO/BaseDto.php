@@ -15,7 +15,7 @@ abstract class BaseDto
         'active_to',
     ];
 
-    abstract public static function createFromArray($fields): BaseDto;
+    abstract public static function createFromArray(?array $fields): BaseDto;
 
     public function __set($name, $value)
     {

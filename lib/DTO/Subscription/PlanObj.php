@@ -14,7 +14,7 @@ class PlanObj extends BaseDto
     private ?string $title = null;
     private ?Plan $trial = null;
 
-    public static function createFromArray($fields): PlanObj
+    public static function createFromArray(?array $fields): PlanObj
     {
         if (!is_array($fields)) {
             return new static();
@@ -127,6 +127,10 @@ class PlanObj extends BaseDto
 
     public function isValid(): bool
     {
+        if (null === $this->plan) {
+            return false;
+        }
+
         return null !== $this->id && $this->plan->isValid();
     }
 }
